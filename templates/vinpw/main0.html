@@ -8,7 +8,7 @@
 		<label class="sr-only" for="vinfield"></label>
 		<input name="vin_number" class="form-control" id="vinfield" placeholder="Enter a VIN">
 	</div>
-	<pre id="vin_result"></pre>
+	<pre id="vin_result" class='result-pre'></pre>
 	<div class="row">
 		<button id="decode-button" class="btn btn-default disabled" style="position:fixed; bottom: 0px; width:100%; height:20%;">Decode!</button>
 	</div>
@@ -47,6 +47,7 @@ function query_for_vin(event, element){
 	$.get( url, function( data ) {
 	  result_el.html( JSON.stringify(data, null, 2) );
 	});
+    result_el.removeClass('result-pre');
 	$.post('/', {'vin': vin_value});
 }
 

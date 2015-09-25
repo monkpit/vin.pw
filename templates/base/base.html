@@ -13,6 +13,11 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
+        <style>
+            .result-pre {
+                display: none;
+            }
+        </style>
 	{% block styles %}
 	{% endblock %}
         <script src="{{ url_for('static', filename='js/vendor/modernizr-2.8.3.min.js') }}"></script>
