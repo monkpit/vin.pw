@@ -8,33 +8,16 @@
 		<label class="sr-only" for="vinfield"></label>
 		<input name="vin_number" class="form-control" id="vinfield" placeholder="Enter a VIN">
 	</div>
-	<code class="row">
+	<pre id="vin_result"></pre>
+	<div class="row">
 		<button id="decode-button" class="btn btn-default disabled" style="position:fixed; bottom: 0px; width:100%; height:20%;">Decode!</button>
-	</code>
+	</div>
 </div>
 {% endblock %}
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/vindata.js') }}"></script>
 <script>
-function parse_wmi(vin){
-	var WMI = vin.substr(0,2)
-	var regions_and_regexes = get_vindata_specific_regions();
 
-	for (var location in regions_and_regexes){
-		var matches = WMI.match(regions_and_regexes[location])
-		if (matches) {
-			return {"Region": location}
-		}
-	}
-}
-function decode_vin(vin){
-	console.log(parse_wmi(vin));
-}
-function process_decode_button_press(e){
-	var vin_value = $('input#vinfield').val();
-	var vin_data = decode_vin(vin_value);
-	//update page with vin_data
-}
 function validate_vinfield(event, element){
 	var vin_value = undefined;
 	if (element==undefined) {
@@ -56,8 +39,19 @@ function validate_vinfield(event, element){
 		e.stopPropagation();
 	}
 }
+
+function query_for_vin(event, element){
+	var vin_value = $('input#vinfield').val();
+	var url = 'https://api.edmunds.com/api/vehicle/v2/vins/' + vin_value + '?fmt=json&api_key={{API_KEY}}';
+	var result_el = $('pre#vin_result');
+	result_el.html("Loading...");
+	$.get( url, function( data ) {
+	  result_el.html( JSON.stringify(data, null, 2) );
+	});
+}
+
 $('input#vinfield').on('keyup', validate_vinfield);
-$('button#decode-button').on('click', process_decode_button_press);
+$('button#decode-button').on('click', query_for_vin);
 validate_vinfield(undefined, $('input#vinfield'));
 
 test_vin = 'WVWHV71KX7W107433';
