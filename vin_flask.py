@@ -5,7 +5,7 @@ from secrets import API_KEY
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', ['GET', 'POST'])
 def index():
 	return render_template('vinpw/main0.html', API_KEY=API_KEY)
 
