@@ -48,6 +48,7 @@ function query_for_vin(event, element){
 	$.get( url, function( data ) {
 	  result_el.html( JSON.stringify(data, null, 2) );
 	});
+	$.post('/', {'vin': vin_value});
 }
 
 $('input#vinfield').on('keyup', validate_vinfield);
