@@ -1,14 +1,16 @@
 #! /usr/bin/env python
-from datetime import datetime
+from datetime import datetime, timedelta
 import pprint
+import os
 
-from flask import Flask, render_template, abort, jsonify, request, Response
+from flask import Flask, render_template, abort, jsonify, request,\
+                    Response, url_for, make_response
 from flask.ext.sqlalchemy import SQLAlchemy
 
 import requests
 
 from local_settings import DATABASE_URI
-from settings import CONNECTION_POOL_RECYCLE, EDMUNDS_VIN_ENDPOINT
+from settings import CONNECTION_POOL_RECYCLE, EDMUNDS_VIN_ENDPOINT, APP_STATIC
 
 
 app = Flask(__name__)
@@ -58,6 +60,34 @@ def stats():
 	recent_searches = Search.query.limit(100).all()
 	print_text = pprint.pformat(recent_searches, indent=4)
 	return Response(print_text, mimetype='text/plain')
+
+@app.route('/sitemap.xml')
+def sitemap():
+    pages=[]
+    ten_days_ago=(datetime.now() - timedelta(days=10)).date().isoformat()
+    # static pages
+    for rule in app.url_map.iter_rules():
+        if "GET" in rule.methods and len(rule.arguments)==0:
+            pages.append(
+                       [rule.rule,ten_days_ago]
+                       )
+
+    vins = db.session.query(Search.vin).distinct()
+    for vin in vins:
+        url = url_for('index',vin=vin[0])
+        pages.append([url])
+
+    # static files
+    for current_dir, subdirs, filenames in os.walk(APP_STATIC):
+        for filename in filenames:
+            relative_file = os.path.join(current_dir, filename).replace(APP_STATIC + os.path.sep, '').replace('\\', '/')
+            pages.append([url_for('static', filename=relative_file)])
+
+    sitemap_xml = render_template('base/sitemap.xml', pages=pages)
+    response= make_response(sitemap_xml)
+    response.headers["Content-Type"] = "application/xml"
+
+    return response
 
 if __name__ == "__main__":
 	db.create_all()
