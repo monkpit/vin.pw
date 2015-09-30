@@ -1,6 +1,10 @@
 {% extends 'base/base.html' %}
 {% block title %}
+{% if vin %}
+<title>Vin Power - {{vin}}</title>
+{% else %}
 <title>Vin Power - Mobile Friendly VIN Search</title>
+{% endif %}
 {% endblock %}
 {% block content %}
 <!-- Header -->
