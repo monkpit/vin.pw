@@ -6,10 +6,12 @@ from flask import Flask, render_template, abort, jsonify, request, Response
 from flask.ext.sqlalchemy import SQLAlchemy
 
 from local_settings import DATABASE_URI
+from settings import CONNECTION_POOL_RECYCLE
 from secrets import API_KEY
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
+app.config['SQLALCHEMY_POOL_RECYCLE'] = CONNECTION_POOL_RECYCLE
 db = SQLAlchemy(app)
 
 class Search(db.Model):
