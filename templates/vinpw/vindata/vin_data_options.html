@@ -1,0 +1,12 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Optional Features</div>
+  <div class="panel-body">
+    {% for parent_option_obj in data.options %}
+      {% for child_option_obj in parent_option_obj.options %}
+        {% if child_option_obj.equipmentType == 'OPTION' %}
+          <p>{{child_option_obj.name}}</p>
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+  </div>
+</div>

@@ -1,0 +1,105 @@
+{
+  "make": {
+    "id": 200004100,
+    "name": "Mazda",
+    "niceName": "mazda"
+  },
+  "model": {
+    "id": "Mazda_Mazdaspeed_6",
+    "name": "Mazdaspeed 6",
+    "niceName": "mazdaspeed-6"
+  },
+  "transmission": {
+    "id": "200179521",
+    "name": "6M",
+    "equipmentType": "TRANSMISSION",
+    "availability": "STANDARD",
+    "transmissionType": "MANUAL",
+    "numberOfSpeeds": "6"
+  },
+  "drivenWheels": "all wheel drive",
+  "numOfDoors": "4",
+  "options": [
+    {
+      "category": "Other",
+      "options": [
+        {
+          "id": "200179502",
+          "name": "Moonroof",
+          "equipmentType": "OPTION",
+          "availability": "Grand Touring"
+        }
+      ]
+    }
+  ],
+  "colors": [
+    {
+      "category": "Interior",
+      "options": [
+        {
+          "id": "200179485",
+          "name": "Black",
+          "equipmentType": "COLOR",
+          "availability": "USED"
+        }
+      ]
+    },
+    {
+      "category": "Exterior",
+      "options": [
+        {
+          "id": "200179483",
+          "name": "Liquid Platinum Mica",
+          "equipmentType": "COLOR",
+          "availability": "USED"
+        }
+      ]
+    }
+  ],
+  "manufacturerCode": "MS6 GT 6P",
+  "price": {
+    "baseMSRP": 29925,
+    "baseInvoice": 27608,
+    "deliveryCharges": 560,
+    "usedTmvRetail": 7340,
+    "usedPrivateParty": 5796,
+    "usedTradeIn": 4678,
+    "estimateTmv": false,
+    "tmvRecommendedRating": 0
+  },
+  "categories": {
+    "market": "Factory Tuner,Performance",
+    "EPAClass": "Compact Cars",
+    "vehicleSize": "Midsize",
+    "primaryBodyType": "Car",
+    "vehicleStyle": "Sedan",
+    "vehicleType": "Car"
+  },
+  "vin": "JM1GG12L761101367",
+  "squishVin": "JM1GG12L61",
+  "years": [
+    {
+      "id": 100504762,
+      "year": 2006,
+      "styles": [
+        {
+          "id": 100511638,
+          "name": "Grand Touring 4dr Sport Sedan AWD (2.3L 4cyl Turbo 6M)",
+          "submodel": {
+            "body": "Sedan",
+            "modelName": "Mazdaspeed 6 Sedan",
+            "niceName": "sedan"
+          },
+          "trim": "Grand Touring"
+        }
+      ]
+    }
+  ],
+  "matchingType": "SQUISHVIN",
+  "completeness": 90,
+  "optionMatchPercent": 100,
+  "MPG": {
+    "highway": "23",
+    "city": "17"
+  }
+}

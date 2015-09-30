@@ -1,0 +1,11 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Model Details</div>
+  <div class="panel-body">
+    <p>{{ data.years[0].styles[0].submodel.modelName }}</P
+    <p>{{ data.years[0].styles[0].name }}</p>
+    <p>{{ data.numOfDoors }} Door</p>
+    {% for color in data.colors %}
+    <p>{{color.category}} - {{color.options[0].name}}</p>
+    {% endfor %}
+  </div>
+</div>

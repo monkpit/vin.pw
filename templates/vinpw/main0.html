@@ -3,24 +3,27 @@
 <title>Vin Power - Mobile Friendly VIN Search</title>
 {% endblock %}
 {% block content %}
-<div class="container-fluid">
-	<div class="row">&nbsp;</div>
-	<div class="row">&nbsp;</div>
-	<div class="row">&nbsp;</div>
-	<div class="form-horizontal" style='clear: all'>
-		<label class="sr-only" for="vinfield"></label>
-		<input name="vin_number" class="form-control" id="vinfield" placeholder="Enter a VIN">
-	</div>
-	<pre id="vin_result" class='result-pre'></pre>
-	<div class="row">
-		<button id="decode-button" class="btn btn-default disabled" style="position:fixed; bottom: 0px; width:100%; height:20%;">Decode!</button>
-	</div>
-</div>
+<!-- Header -->
+<header id="top" class="header">
+		<div class="text-vertical-center">
+				<h1>Search for any VIN</h1>
+				<!--<h3>By @monkpit</h3>-->
+				<br>
+				<form id="vinfield-input-group" class="input-group col-sm-4 col-sm-offset-4 col-md-4 col-sm-offset-5 col-xs-10 col-xs-offset-1">
+						<input id="vinfield" type="text" autofocus class="form-control" placeholder="Enter a VIN..." value="{{vin}}">
+						<span class="input-group-btn">
+						  	<button id="decode-button" class="btn btn-default" type="submit">Search!</button>
+						</span>
+				</form>
+			<div id="vin-result" style="max-width: 100%" class="col-sm-4 col-sm-offset-4 col-md-4 col-sm-offset-5 col-xs-10 col-xs-offset-1"></div>
+</header>
+
 {% endblock %}
 {% block scripts %}
 <script>
+var vinfield = $('input#vinfield');
 
-function validate_vinfield(event, element){
+function validate_vinfield(element){
 	var vin_value = undefined;
 	if (element==undefined) {
 		vin_value = $(this).val();
@@ -42,22 +45,45 @@ function validate_vinfield(event, element){
 	}
 }
 
-function query_for_vin(event, element){
-	var vin_value = $('input#vinfield').val();
-	var url = 'https://api.edmunds.com/api/vehicle/v2/vins/' + vin_value + '?fmt=json&api_key={{API_KEY}}';
-	var result_el = $('pre#vin_result');
+function query_for_vin(event_param, element, vin){
+	if (event_param) {
+		event_param.preventDefault();
+	}
+	var vin_value = vin || vinfield.val();
+	console.log("vin in query_for_vin was: ", vin_value);
+	var url = '/lookup/'+ vin_value
+	var result_el = $('div#vin-result');
 	result_el.html("Loading...");
 	$.get( url, function( data ) {
-	  result_el.html( JSON.stringify(data, null, 2) );
+	  result_el.html(data);
+		var state = {vin: vin_value};
+		window.history.pushState(state, vin_value, vin_value);
 	});
     result_el.removeClass('result-pre');
-	$.post('/', {'vin': vin_value});
 }
 
-$('input#vinfield').on('keyup', validate_vinfield);
+function validate_loop(){
+	setTimeout(function(){
+		validate_vinfield(vinfield);
+		validate_loop();
+	}, 100);
+};
+
+validate_loop();
+
+window.onpopstate = function(event){
+	if (event.state){
+		query_for_vin(null, null, event.state.vin);
+	}
+}
+
 $('button#decode-button').on('click', query_for_vin);
-validate_vinfield(undefined, $('input#vinfield'));
+
+if (vinfield.val().length > 0) {
+	$('button#decode-button').click();
+}
 
 test_vin = 'WVWHV71KX7W107433';
+test_vin2 = 'JM1GG12L761101367';
 </script>
 {% endblock %}

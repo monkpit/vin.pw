@@ -1,0 +1,29 @@
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Pricing Info</div>
+
+  <!-- Table -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Original MSRP</th>
+        <th>Trade-In Value</th>
+        <th>Used Retail Price</th>
+        <th>Used Private Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>USD $<span class="dollars">{{data.price.baseMSRP}}</span></td>
+        <td>USD $<span class="dollars">{{data.price.usedTradeIn}}</span></td>
+        <td>USD $<span class="dollars">{{data.price.usedTmvRetail}}</span></td>
+        <td>USD $<span class="dollars">{{data.price.usedPrivateParty}}</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<script>
+$.each($('span.dollars'), function(){
+  $(this).html(Math.round($(this).html()));
+});
+</script>

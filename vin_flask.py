@@ -5,9 +5,11 @@ import pprint
 from flask import Flask, render_template, abort, jsonify, request, Response
 from flask.ext.sqlalchemy import SQLAlchemy
 
+import requests
+
 from local_settings import DATABASE_URI
-from settings import CONNECTION_POOL_RECYCLE
-from secrets import API_KEY
+from settings import CONNECTION_POOL_RECYCLE, EDMUNDS_VIN_ENDPOINT
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
@@ -26,20 +28,30 @@ class Search(db.Model):
     def __repr__(self):
         return '< VIN: {vin} - Searched: {time} >'.format(vin=self.vin, time=self.search_time)
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-	if request.method == 'POST':
-		searched_vin = request.form.get('vin', None)
-		if searched_vin is None:
-			abort(400)
-		else:
-			search = Search(vin=searched_vin)
-			print(search)
-			db.session.add(search)
-			db.session.commit()
-			return jsonify(response='201'), 201
-	else:
-		return render_template('vinpw/main0.html', API_KEY=API_KEY)
+@app.route('/', defaults={'vin': ""})
+@app.route('/<vin>')
+def index(vin):
+	return render_template('vinpw/main0.html', vin=vin)
+
+@app.route('/lookup/<vin>')
+def lookup_vin(vin):
+    if vin is None:
+        return render_template('vinpw/invalid_vin.html')
+    elif len(vin) != 17:
+        return render_template('vinpw/invalid_vin.html')
+    else:
+        search = Search(vin=vin)
+        print(search)
+        db.session.add(search)
+        db.session.commit()
+        url = EDMUNDS_VIN_ENDPOINT.format(vin=vin)
+        print(url)
+        try:
+            vin_data_json = requests.get(url).json()
+            return render_template('vinpw/vin_data.html', data=vin_data_json)
+        except Exception as e:
+            print(e)
+            return render_template('vinpw/invalid_vin.html')
 
 @app.route('/stats')
 def stats():
